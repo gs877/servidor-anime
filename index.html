@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamPlayer - Anime Premium</title>
+    <style>
+        body {
+            background-color: #0e1118;
+            color: #ffffff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 0;
+        }
+        .player-container {
+            width: 90%;
+            max-width: 800px;
+            background: #161b26;
+            border-radius: 12px;
+            overflow: hidden;
+            padding-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+        }
+        .video-wrapper {
+            width: 100%;
+            background: #000;
+            position: relative;
+            padding-bottom: 56.25%; /* Relación 16:9 aspecto de cine */
+            height: 0;
+        }
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .search-box {
+            display: flex;
+            padding: 20px;
+            gap: 10px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #232d3f;
+            background: #0e1118;
+            color: white;
+            font-size: 14px;
+        }
+        .search-box button {
+            padding: 12px 24px;
+            background: #ffdd57;
+            border: none;
+            border-radius: 6px;
+            color: #0e1118;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* --- NUEVA SECCIÓN SECCIÓN ESTILO NETFLIX --- */
+        .catalog-container {
+            width: 90%;
+            max-width: 800px;
+            text-align: left;
+        }
+        .catalog-title {
+            color: #ffdd57;
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            border-left: 4px solid #ffdd57;
+            padding-left: 10px;
+        }
+        /* Cuadrícula flexible para las portadas */
+        .grid-anime {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+        }
+        /* Tarjeta individual de cada anime */
+        .card-anime {
+            background: #161b26;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        /* Efecto de agrandado estilo Netflix al pasar el mouse */
+        .card-anime:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 221, 87, 0.2);
+        }
+        .card-anime img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            display: block;
+        }
+        .card-info {
+            padding: 12px;
+        }
+        .anime-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .anime-tag {
+            font-size: 11px;
+            color: #ffdd57;
+            background: rgba(255, 221, 87, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- REPRODUCTOR PRINCIPAL -->
+    <div class="player-container">
+        <div id="media-container" class="video-wrapper">
+            <video id="anime-video" controls poster="https://alphacoders.com">
+                <source src="video.mp4" type="video/mp4" />
+                Tu navegador no soporta la reproducción de video.
+            </video>
+        </div>
+
+        <div style="padding: 20px 20px 0 20px;">
+            <h1 style="color: #ffdd57; margin: 0 0 5px 0; font-size: 24px;">Plataforma Anime Premium</h1>
+            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Reproductor de pruebas activo.</p>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="url-input" placeholder="Escribe 'video.mp4' para probar tu video local" />
+            <button id="btn-limpiar" onclick="procesarVideo()">Limpiar Video</button>
+        </div>
+    </div>
+
+    <!-- NUEVO CATÁLOGO VISUAL ABAJO -->
+    <div class="catalog-container">
+        <div class="catalog-title">Animes Populares de la Semana</div>
+        
+        <div class="grid-anime">
+            <!-- Tarjeta 1: Naruto -->
+            <div class="card-anime" onclick="alert('¡Pronto conectarás este botón con los episodios reales!')">
+                <img src="https://media-amazon.com" alt="Naruto">
+                <div class="card-info">
+                    <p class="anime-name">Naruto Shippuden</p>
+                    <span class="anime-tag">Episodio 1</span>
+                </div>
+            </div>
+
+            <!-- Tarjeta 2: One Piece -->
+            <div class="card-anime" onclick="alert('¡Pronto conectarás este botón con los episodios reales!')">
+                <img src="https://media-amazon.com" alt="One Piece">
+                <div class="card-info">
+                    <p class="anime-name">One Piece</p>
+                    <span class="anime-tag">Episodio 1000</span>
+                </div>
+            </div>
+
+            <!-- Tarjeta 3: Demon Slayer -->
+            <div class="card-anime" onclick="alert('¡Pronto conectarás este botón con los episodios reales!')">
+                <img src="https://media-amazon.com" alt="Demon Slayer">
+                <div class="card-info">
+                    <p class="anime-name">Kimetsu no Yaiba</p>
+                    <span class="anime-tag">Temporada 4</span>
+                </div>
+            </div>
+
+            <!-- Tarjeta 4: Attack on Titan -->
+            <div class="card-anime" onclick="alert('¡Pronto conectarás este botón con los episodios reales!')">
+                <img src="https://media-amazon.com" alt="Shingeki">
+                <div class="card-info">
+                    <p class="anime-name">Attack on Titan</p>
+                    <span class="anime-tag">Final Season</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function procesarVideo() {
+            const urlOriginal = document.getElementById('url-input').value.trim();
+            if (!urlOriginal) return alert('Por favor, escribe un enlace en la caja.');
+            const contenedor = document.getElementById('media-container');
+
+            if (urlOriginal.includes('youtube.com') || urlOriginal.includes('youtu.be')) {
+                try {
+                    let videoId = '';
+                    if (urlOriginal.includes('watch?v=')) {
+                        const urlObj = new URL(urlOriginal);
+                        videoId = urlObj.searchParams.get('v');
+                    } else if (urlOriginal.includes('youtu.be/')) {
+                        const partes = urlOriginal.split('youtu.be/');
+                        if (partes.length > 1) videoId = partes[1].split('?')[0];
+                    }
+                    if (videoId && videoId.length === 11) {
+                        contenedor.innerHTML = '<iframe src="https://youtube.com' + videoId + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+                        return;
+                    }
+                } catch (err) { console.error(err); }
+            }
+
+            if (urlOriginal.includes('.mp4') || urlOriginal.includes('.m3u8') || urlOriginal === 'video.mp4') {
+                contenedor.innerHTML = '<video id="anime-video" controls autoplay><source src="' + urlOriginal + '" type="video/mp4"></video>';
+                return;
+            }
+            alert('Enlace recibido. Preparando la subida a internet para saltar los bloqueos locales.');
+        }
+    </script>
+</body>
+</html>
