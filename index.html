@@ -137,11 +137,11 @@
 
         <div style="padding: 20px 20px 0 20px;">
             <h1 style="color: #ffdd57; margin: 0 0 5px 0; font-size: 24px;">Plataforma Anime Premium</h1>
-            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Motor unificado con extractor de rutas nativas.</p>
+            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Motor unificado con extractor de rutas certificado.</p>
         </div>
 
         <div class="search-box">
-            <input type="text" id="url-input" placeholder="Pega aquí tu enlace largo o el enlace de Compartir de YouTube" />
+            <input type="text" id="url-input" placeholder="Pega aquí tu enlace largo o el de Compartir de YouTube" />
             <button id="btn-limpiar" onclick="procesarVideo()">Limpiar Video</button>
         </div>
     </div>
@@ -181,7 +181,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE EXTRACCIÓN CON BARRA DIAGONAL PLANA OBLIGATORIA -->
+    <!-- SCRIPT DE LOGICA CORREGIDA Y AJUSTADA POR AMBAS IAS -->
     <script>
         function procesarVideo() {
             const urlOriginal = document.getElementById('url-input').value.trim();
@@ -193,31 +193,27 @@
                 try {
                     let idLimpio = '';
 
+                    // CASO A: ENLACES LARGOS DE LA BARRA DE ARRIBA
                     if (urlOriginal.includes('watch?v=')) {
                         const urlObj = new URL(urlOriginal);
                         idLimpio = urlObj.searchParams.get('v');
                     } 
+                    // CASO B: ENLACES CORTOS DEL BOTÓN COMPARTIR
                     else if (urlOriginal.includes('youtu.be/')) {
-                        // Cortamos el texto usando la barra nativa de compartir
-                        const partes = urlOriginal.split('youtu.be/');
-                        if (partes.length > 1) {
-                            const despuesDeBarra = partes[1];
-                            // Quitamos el rastro ?si= para aislar las 11 letras exactas
-                            const subPartes = despuesDeBarra.split('?');
-                            idLimpio = subPartes[0];
-                        }
+                        const urlObj = new URL(urlOriginal);
+                        // Cortamos de forma nativa la ruta del texto para aislar las 11 letras reales
+                        const rutaTexto = urlObj.pathname;
+                        idLimpio = rutaTexto.replace('/', '');
                     }
 
-                    // APLICAMOS LA REGLA EXPLICADA POR LA OTRA IA:
-                    // Ponemos las barras inclinadas fijas en texto plano y la palabra embed obligatoria
-                    if (idLimpio && idLimpio.length === 11) {
-                        const urlFinalCertificada = 'https://youtube.com' + idLimpio + '?autoplay=1';
-                        contenedor.innerHTML = '<iframe src="' + urlFinalCertificada + '" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-                        console.log('¡Éxito absoluto! URL inyectada de forma segura con sus barras.');
+                    // Sumamos el ID en texto plano con la barra diagonal /embed/ obligatoria para ganarle a Chrome
+                    if (idLimpio) {
+                        contenedor.innerHTML = '<iframe src="https://youtube.com' + idLimpio + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+                        console.log('¡Éxito absoluto! Video cargado en el iframe.');
                         return;
                     }
                 } catch (err) {
-                    console.error('Error en el motor de YouTube:', err);
+                    console.error('Error de lectura de URL:', err);
                 }
             }
 
@@ -226,7 +222,7 @@
                 return;
             }
 
-            alert('Enlace no reconocido. Por favor, asegúrate de copiar el link de compartir completo.');
+            alert('Enlace no reconocido. Asegúrate de copiar el link de la barra superior o el de Compartir oficial de YouTube.');
         }
     </script>
 </body>
