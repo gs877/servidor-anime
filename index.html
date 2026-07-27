@@ -32,10 +32,10 @@
             width: 100%;
             background: #000;
             position: relative;
-            padding-bottom: 56.25%; /* Relación 16:9 aspecto de cine */
+            padding-bottom: 56.25%; /* Relación de aspecto de cine 16:9 */
             height: 0;
         }
-        .video-wrapper video {
+        .video-wrapper video, .video-wrapper iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -67,8 +67,6 @@
             cursor: pointer;
             font-size: 14px;
         }
-
-        /* --- NUEVA SECCIÓN SECCIÓN ESTILO NETFLIX --- */
         .catalog-container {
             width: 90%;
             max-width: 800px;
@@ -82,13 +80,11 @@
             border-left: 4px solid #ffdd57;
             padding-left: 10px;
         }
-        /* Cuadrícula flexible para las portadas */
         .grid-anime {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 20px;
         }
-        /* Tarjeta individual de cada anime */
         .card-anime {
             background: #161b26;
             border-radius: 8px;
@@ -97,7 +93,6 @@
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
         }
-        /* Efecto de agrandado estilo Netflix al pasar el mouse */
         .card-anime:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(255, 221, 87, 0.2);
@@ -131,7 +126,7 @@
 </head>
 <body>
 
-    <!-- REPRODUCTOR PRINCIPAL -->
+    <!-- REPRODUCTOR MULTIMEDIA -->
     <div class="player-container">
         <div id="media-container" class="video-wrapper">
             <video id="anime-video" controls poster="https://alphacoders.com">
@@ -142,21 +137,19 @@
 
         <div style="padding: 20px 20px 0 20px;">
             <h1 style="color: #ffdd57; margin: 0 0 5px 0; font-size: 24px;">Plataforma Anime Premium</h1>
-            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Reproductor de pruebas activo.</p>
+            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Motor de inyección multimedia unificado en la nube.</p>
         </div>
 
         <div class="search-box">
-            <input type="text" id="url-input" placeholder="Escribe 'video.mp4' para probar tu video local" />
+            <input type="text" id="url-input" placeholder="Pega aquí tu enlace largo de YouTube o archivo directo" />
             <button id="btn-limpiar" onclick="procesarVideo()">Limpiar Video</button>
         </div>
     </div>
 
-    <!-- NUEVO CATÁLOGO VISUAL ABAJO -->
+    <!-- CATÁLOGO ESTILO NETFLIX -->
     <div class="catalog-container">
         <div class="catalog-title">Animes Populares de la Semana</div>
-        
         <div class="grid-anime">
-            <!-- Tarjeta 1: Naruto -->
             <div class="card-anime" onclick="alert('¡Pronto conectarás este botón con los episodios reales!')">
                 <img src="https://media-amazon.com" alt="Naruto">
                 <div class="card-info">
@@ -164,8 +157,6 @@
                     <span class="anime-tag">Episodio 1</span>
                 </div>
             </div>
-
-            <!-- Tarjeta 2: One Piece -->
             <div class="card-anime" onclick="alert('¡Pronto conectarás este botón con los episodios reales!')">
                 <img src="https://media-amazon.com" alt="One Piece">
                 <div class="card-info">
@@ -173,8 +164,6 @@
                     <span class="anime-tag">Episodio 1000</span>
                 </div>
             </div>
-
-            <!-- Tarjeta 3: Demon Slayer -->
             <div class="card-anime" onclick="alert('¡Pronto conectarás este botón con los episodios reales!')">
                 <img src="https://media-amazon.com" alt="Demon Slayer">
                 <div class="card-info">
@@ -182,10 +171,8 @@
                     <span class="anime-tag">Temporada 4</span>
                 </div>
             </div>
-
-            <!-- Tarjeta 4: Attack on Titan -->
             <div class="card-anime" onclick="alert('¡Pronto conectarás este botón con los episodios reales!')">
-                <img src="https://media-amazon.com" alt="Shingeki">
+                <img src="https://media-amazon.com" alt="Attack on Titan">
                 <div class="card-info">
                     <p class="anime-name">Attack on Titan</p>
                     <span class="anime-tag">Final Season</span>
@@ -194,14 +181,15 @@
         </div>
     </div>
 
-       <script>
+    <!-- MOTOR DE LOGICA UNIFICADO SIN ERRORES -->
+    <script>
         function procesarVideo() {
             const urlOriginal = document.getElementById('url-input').value.trim();
             if (!urlOriginal) return alert('Por favor, escribe o pega un enlace en la caja.');
 
             const contenedor = document.getElementById('media-container');
 
-            // PIPELINE A: DETECTOR OFICIAL PARA YOUTUBE (watch?v=)
+            // PIPELINE 1: EXTRACTOR OFICIAL YOUTUBE (watch?v=)
             if (urlOriginal.includes('watch?v=')) {
                 try {
                     const urlObj = new URL(urlOriginal);
@@ -209,40 +197,22 @@
 
                     if (idLimpio) {
                         contenedor.innerHTML = '<iframe src="https://youtube.com' + idLimpio + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-                        console.log('¡Éxito absoluto! Video inyectado de forma segura.');
+                        console.log('¡Éxito! Video de YouTube inyectado.');
                         return;
                     }
                 } catch (err) {
-                    console.error('Error de lectura de URL:', err);
+                    console.error('Error al leer la URL de YouTube:', err);
                 }
             }
 
-            // PIPELINE B: RESPALDO PARA ARCHIVOS DIRECTOS .MP4
+            // PIPELINE 2 Y 3: ARCHIVOS DIRECTOS .MP4 / .M3U8 O REPRODUCCIÓN LOCAL
             if (urlOriginal.includes('.mp4') || urlOriginal.includes('.m3u8') || urlOriginal === 'video.mp4') {
                 contenedor.innerHTML = '<video id="anime-video" controls autoplay><source src="' + urlOriginal + '" type="video/mp4"></video>';
+                console.log('¡Éxito! Archivo de video directo o local inyectado.');
                 return;
             }
 
-            alert('Por favor, asegúrate de copiar únicamente el enlace largo completo directamente desde la barra de direcciones de arriba de YouTube.');
-        }
-    </script>
-
-                    if (videoId && videoId.length === 11) {
-                        contenedor.innerHTML = '<iframe src="https://youtube.com' + videoId + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-                        console.log('¡Éxito absoluto! Video de YouTube inyectado.');
-                        return;
-                    }
-                } catch (err) {
-                    console.error('Error al procesar la URL de YouTube:', err);
-                }
-            }
-
-
-            if (urlOriginal.includes('.mp4') || urlOriginal.includes('.m3u8') || urlOriginal === 'video.mp4') {
-                contenedor.innerHTML = '<video id="anime-video" controls autoplay><source src="' + urlOriginal + '" type="video/mp4"></video>';
-                return;
-            }
-            alert('Enlace recibido. Preparando la subida a internet para saltar los bloqueos locales.');
+            alert('Formato no reconocido. Asegúrate de copiar el enlace largo de la barra de direcciones de YouTube (que tenga watch?v=) o un archivo directo .mp4.');
         }
     </script>
 </body>
