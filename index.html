@@ -137,11 +137,11 @@
 
         <div style="padding: 20px 20px 0 20px;">
             <h1 style="color: #ffdd57; margin: 0 0 5px 0; font-size: 24px;">Plataforma Anime Premium</h1>
-            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Extractor inteligente unificado y certificado en la nube.</p>
+            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Motor unificado con extractor nativo de internet.</p>
         </div>
 
         <div class="search-box">
-            <input type="text" id="url-input" placeholder="Pega aquí cualquier enlace de YouTube o archivo directo" />
+            <input type="text" id="url-input" placeholder="Pega aquí tu enlace largo o el enlace de Compartir de YouTube" />
             <button id="btn-limpiar" onclick="procesarVideo()">Limpiar Video</button>
         </div>
     </div>
@@ -181,7 +181,7 @@
         </div>
     </div>
 
-    <!-- LOGICA DEL EXTRACTOR OFICIAL Y SEGURO DE GOOGLE -->
+    <!-- SCRIPT DEFINITIVO DE EXTRACCIÓN NATIVA (MÓVIL Y ESCRITORIO) -->
     <script>
         function procesarVideo() {
             const urlOriginal = document.getElementById('url-input').value.trim();
@@ -189,40 +189,50 @@
 
             const contenedor = document.getElementById('media-container');
 
-            // ANALIZADOR AUTOMÁTICO DE YOUTUBE CON PARAMS DE INTERNET
+            // EXTRACTOR MULTIPLATAFORMA NATIVO CERTIFICADO
             if (urlOriginal.includes('youtube.com') || urlOriginal.includes('youtu.be')) {
                 try {
-                    let videoId = '';
-                    
+                    let idLimpio = '';
+
+                    // CASO A: ENLACE LARGO DE LA BARRA DE ARRIBA (watch?v=)
                     if (urlOriginal.includes('watch?v=')) {
                         const urlObj = new URL(urlOriginal);
-                        videoId = urlObj.searchParams.get('v');
-                    } else if (urlOriginal.includes('youtu.be/')) {
-                        const partes = urlOriginal.split('youtu.be/');
-                        videoId = partes[1].split('?')[0]; // Extrae el ID ignorando las letras extras del final
-                    } else if (urlOriginal.includes('embed/')) {
+                        idLimpio = urlObj.searchParams.get('v');
+                    } 
+                    // CASO B: ENLACE CORTO DE COMPARTIR CELULAR (youtu.be/)
+                    else if (urlOriginal.includes('youtu.be/')) {
+                        const urlObj = new URL(urlOriginal);
+                        // El lector de rutas extrae la palabra exacta después de la barra diagonal (ej: /hwoanigWT7I)
+                        const rutaSucia = urlObj.pathname; 
+                        idLimpio = rutaSucia.replace('/', ''); // Le quitamos la barra inclinada inicial y queda el ID puro
+                    }
+                    // CASO C: ENLACES INCRUSTADOS (embed/)
+                    else if (urlOriginal.includes('embed/')) {
                         const partes = urlOriginal.split('embed/');
-                        videoId = partes[1].split('?')[0];
+                        if (partes.length > 1) {
+                            const subPartes = partes[1].split('?');
+                            idLimpio = subPartes[0];
+                        }
                     }
 
-                    if (videoId) {
-                        // Inyectamos el ID real de YouTube de forma limpia en el iframe oficial de Google
-                        contenedor.innerHTML = '<iframe src="https://youtube.com' + videoId + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-                        console.log('¡Éxito absoluto! Video cargado.');
+                    // VALIDACIÓN DE SEGURIDAD INTERNACIONAL DE GOOGLE (Los IDs de YouTube miden exactamente 11 letras)
+                    if (idLimpio && idLimpio.length === 11) {
+                        contenedor.innerHTML = '<iframe src="https://youtube.com' + idLimpio + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+                        console.log('¡Éxito absoluto! Video inyectado de forma nativa.');
                         return;
                     }
                 } catch (err) {
-                    console.error('Error al procesar la URL:', err);
+                    console.error('Error en el motor de YouTube:', err);
                 }
             }
 
-            // CASO ARCHIVO DIRECTO O REPRODUCCIÓN LOCAL
+            // RESPALDO PARA ARCHIVOS LOCALES O ENLACES .MP4 DIRECTOS
             if (urlOriginal.includes('.mp4') || urlOriginal.includes('.m3u8') || urlOriginal === 'video.mp4') {
                 contenedor.innerHTML = '<video id="anime-video" controls autoplay><source src="' + urlOriginal + '" type="video/mp4"></video>';
                 return;
             }
 
-            alert('Formato de enlace no reconocido. Copia toda la URL de la barra de arriba o usa el enlace de compartir.');
+            alert('Enlace no reconocido. Asegúrate de copiar el link de la barra superior o el de Compartir oficial de YouTube.');
         }
     </script>
 </body>
