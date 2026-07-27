@@ -195,27 +195,39 @@
     </div>
 
     <script>
-        function procesarVideo() {
+               function procesarVideo() {
             const urlOriginal = document.getElementById('url-input').value.trim();
-            if (!urlOriginal) return alert('Por favor, escribe un enlace en la caja.');
+            if (!urlOriginal) return alert('Por favor, escribe o pega un enlace en la caja.');
+
             const contenedor = document.getElementById('media-container');
 
-                        // PIPELINE A: DETECTOR Y EXTRACTOR OFICIAL PARA YOUTUBE
-            if (urlOriginal.includes('youtube.com') || urlOriginal.includes('youtu.be')) {
+            // PIPELINE ÚNICO CERTIFICADO PARA ENLACES LARGOS DE LA BARRA DE ARRIBA
+            if (urlOriginal.includes('watch?v=')) {
                 try {
-                    let videoId = '';
-                    
-                    if (urlOriginal.includes('watch?v=')) {
-                        const urlObj = new URL(urlOriginal);
-                        videoId = urlObj.searchParams.get('v');
-                    } 
-                    else if (urlOriginal.includes('youtu.be/')) {
-                        const partes = urlOriginal.split('youtu.be/');
-                        if (partes.length > 1) {
-                            const despuesDeBarra = partes[1];
-                            videoId = despuesDeBarra.split('?')[0];
-                        }
-                    } 
+                    // El lector oficial de red de Chrome extrae el ID exacto respetando mayúsculas y minúsculas
+                    const urlObj = new URL(urlOriginal);
+                    const idLimpio = urlObj.searchParams.get('v');
+
+                    if (idLimpio) {
+                        // Construcción limpia y nativa sin alteraciones de texto
+                        contenedor.innerHTML = '<iframe src="https://youtube.com' + idLimpio + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+                        console.log('¡Éxito absoluto! Video inyectado de forma segura.');
+                        return;
+                    }
+                } catch (err) {
+                    console.error('Error al procesar la URL:', err);
+                }
+            }
+
+            // PIPELINE B: RESPALDO PARA ARCHIVOS DIRECTOS .MP4
+            if (urlOriginal.includes('.mp4') || urlOriginal.includes('.m3u8') || urlOriginal === 'video.mp4') {
+                contenedor.innerHTML = '<video id="anime-video" controls autoplay><source src="' + urlOriginal + '" type="video/mp4"></video>';
+                return;
+            }
+
+            alert('Por favor, asegúrate de copiar únicamente el enlace largo completo directamente desde la barra de direcciones de arriba de YouTube.');
+        }
+
 
                     if (videoId && videoId.length === 11) {
                         contenedor.innerHTML = '<iframe src="https://youtube.com' + videoId + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
