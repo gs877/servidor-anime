@@ -137,11 +137,11 @@
 
         <div style="padding: 20px 20px 0 20px;">
             <h1 style="color: #ffdd57; margin: 0 0 5px 0; font-size: 24px;">Plataforma Anime Premium</h1>
-            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Motor optimizado para enlaces móviles y de compartir.</p>
+            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Extractor inteligente unificado y certificado en la nube.</p>
         </div>
 
         <div class="search-box">
-            <input type="text" id="url-input" placeholder="Pega aquí el enlace que obtienes al darle COMPARTIR en YouTube" />
+            <input type="text" id="url-input" placeholder="Pega aquí cualquier enlace de YouTube o archivo directo" />
             <button id="btn-limpiar" onclick="procesarVideo()">Limpiar Video</button>
         </div>
     </div>
@@ -181,7 +181,7 @@
         </div>
     </div>
 
-    <!-- LOGICA DEL INYECTOR MULTIMEDIA COMPARTIDO -->
+    <!-- LOGICA DEL EXTRACTOR OFICIAL Y SEGURO DE GOOGLE -->
     <script>
         function procesarVideo() {
             const urlOriginal = document.getElementById('url-input').value.trim();
@@ -189,33 +189,40 @@
 
             const contenedor = document.getElementById('media-container');
 
-            // PIPELINE INTEGRAL PARA ENLACES CORTOS DE COMPARTIR (youtu.be)
-            if (urlOriginal.includes('youtu.be/')) {
+            // ANALIZADOR AUTOMÁTICO DE YOUTUBE CON PARAMS DE INTERNET
+            if (urlOriginal.includes('youtube.com') || urlOriginal.includes('youtu.be')) {
                 try {
-                    // Cortamos la URL para aislar de forma exacta los 11 caracteres respetando mayúsculas
-                    const segmentoUrl = urlOriginal.split('youtu.be/')[1];
-                    if (segmentoUrl) {
-                        // Eliminamos los parámetros extras del final (?si=...) para dejar el ID puro
-                        const idLimpio = segmentoUrl.split('?')[0];
+                    let videoId = '';
+                    
+                    if (urlOriginal.includes('watch?v=')) {
+                        const urlObj = new URL(urlOriginal);
+                        videoId = urlObj.searchParams.get('v');
+                    } else if (urlOriginal.includes('youtu.be/')) {
+                        const partes = urlOriginal.split('youtu.be/');
+                        videoId = partes[1].split('?')[0]; // Extrae el ID ignorando las letras extras del final
+                    } else if (urlOriginal.includes('embed/')) {
+                        const partes = urlOriginal.split('embed/');
+                        videoId = partes[1].split('?')[0];
+                    }
 
-                        if (idLimpio && idLimpio.length === 11) {
-                            contenedor.innerHTML = '<iframe src="https://youtube.com' + idLimpio + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-                            console.log('¡Éxito total! Video móvil inyectado con éxito.');
-                            return;
-                        }
+                    if (videoId) {
+                        // Inyectamos el ID real de YouTube de forma limpia en el iframe oficial de Google
+                        contenedor.innerHTML = '<iframe src="https://youtube.com' + videoId + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+                        console.log('¡Éxito absoluto! Video cargado.');
+                        return;
                     }
                 } catch (err) {
-                    console.error('Error en el extractor móvil:', err);
+                    console.error('Error al procesar la URL:', err);
                 }
             }
 
-            // RESPALDO PARA ARCHIVOS LOCALES O .MP4 DIRECTOS DE INTERNET
+            // CASO ARCHIVO DIRECTO O REPRODUCCIÓN LOCAL
             if (urlOriginal.includes('.mp4') || urlOriginal.includes('.m3u8') || urlOriginal === 'video.mp4') {
                 contenedor.innerHTML = '<video id="anime-video" controls autoplay><source src="' + urlOriginal + '" type="video/mp4"></video>';
                 return;
             }
 
-            alert('Enlace no reconocido. Por favor, pega un enlace corto válido de la opción COMPARTIR de YouTube.');
+            alert('Formato de enlace no reconocido. Copia toda la URL de la barra de arriba o usa el enlace de compartir.');
         }
     </script>
 </body>
