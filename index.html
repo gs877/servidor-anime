@@ -201,24 +201,24 @@
 
             const contenedor = document.getElementById('media-container');
 
-            // PIPELINE ÚNICO CERTIFICADO PARA ENLACES LARGOS DE LA BARRA DE ARRIBA
+                        // PIPELINE A: DETECTOR Y EXTRACTOR OFICIAL PARA YOUTUBE
             if (urlOriginal.includes('watch?v=')) {
                 try {
-                    // El lector oficial de red de Chrome extrae el ID exacto respetando mayúsculas y minúsculas
+                    // Lector directo de red que extrae el ID de forma limpia
                     const urlObj = new URL(urlOriginal);
                     const idLimpio = urlObj.searchParams.get('v');
 
                     if (idLimpio) {
-                        // Construcción limpia y nativa sin alteraciones de texto
+                        // Inyección plana y exacta con el embed oficial de Google
                         contenedor.innerHTML = '<iframe src="https://youtube.com' + idLimpio + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-
                         console.log('¡Éxito absoluto! Video inyectado de forma segura.');
                         return;
                     }
                 } catch (err) {
-                    console.error('Error al procesar la URL:', err);
+                    console.error('Error de lectura de URL:', err);
                 }
             }
+
 
             // PIPELINE B: RESPALDO PARA ARCHIVOS DIRECTOS .MP4
             if (urlOriginal.includes('.mp4') || urlOriginal.includes('.m3u8') || urlOriginal === 'video.mp4') {
