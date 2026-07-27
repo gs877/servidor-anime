@@ -194,22 +194,20 @@
         </div>
     </div>
 
-    <script>
-               function procesarVideo() {
+       <script>
+        function procesarVideo() {
             const urlOriginal = document.getElementById('url-input').value.trim();
             if (!urlOriginal) return alert('Por favor, escribe o pega un enlace en la caja.');
 
             const contenedor = document.getElementById('media-container');
 
-                        // PIPELINE A: DETECTOR Y EXTRACTOR OFICIAL PARA YOUTUBE
+            // PIPELINE A: DETECTOR OFICIAL PARA YOUTUBE (watch?v=)
             if (urlOriginal.includes('watch?v=')) {
                 try {
-                    // Lector directo de red que extrae el ID de forma limpia
                     const urlObj = new URL(urlOriginal);
                     const idLimpio = urlObj.searchParams.get('v');
 
                     if (idLimpio) {
-                        // Inyección plana y exacta con el embed oficial de Google
                         contenedor.innerHTML = '<iframe src="https://youtube.com' + idLimpio + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
                         console.log('¡Éxito absoluto! Video inyectado de forma segura.');
                         return;
@@ -219,7 +217,6 @@
                 }
             }
 
-
             // PIPELINE B: RESPALDO PARA ARCHIVOS DIRECTOS .MP4
             if (urlOriginal.includes('.mp4') || urlOriginal.includes('.m3u8') || urlOriginal === 'video.mp4') {
                 contenedor.innerHTML = '<video id="anime-video" controls autoplay><source src="' + urlOriginal + '" type="video/mp4"></video>';
@@ -228,7 +225,7 @@
 
             alert('Por favor, asegúrate de copiar únicamente el enlace largo completo directamente desde la barra de direcciones de arriba de YouTube.');
         }
-
+    </script>
 
                     if (videoId && videoId.length === 11) {
                         contenedor.innerHTML = '<iframe src="https://youtube.com' + videoId + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
