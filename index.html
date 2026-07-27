@@ -32,7 +32,7 @@
             width: 100%;
             background: #000;
             position: relative;
-            padding-bottom: 56.25%; /* Relación de aspecto de cine 16:9 */
+            padding-bottom: 56.25%; /* Relación 16:9 aspecto de cine */
             height: 0;
         }
         .video-wrapper video, .video-wrapper iframe {
@@ -137,11 +137,11 @@
 
         <div style="padding: 20px 20px 0 20px;">
             <h1 style="color: #ffdd57; margin: 0 0 5px 0; font-size: 24px;">Plataforma Anime Premium</h1>
-            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Motor de inyección multimedia unificado en la nube.</p>
+            <p style="color: #8a99ad; margin: 0; font-size: 14px;">Motor optimizado para enlaces móviles y de compartir.</p>
         </div>
 
         <div class="search-box">
-            <input type="text" id="url-input" placeholder="Pega aquí tu enlace largo de YouTube o archivo directo" />
+            <input type="text" id="url-input" placeholder="Pega aquí el enlace que obtienes al darle COMPARTIR en YouTube" />
             <button id="btn-limpiar" onclick="procesarVideo()">Limpiar Video</button>
         </div>
     </div>
@@ -181,7 +181,7 @@
         </div>
     </div>
 
-    <!-- MOTOR DE LOGICA UNIFICADO SIN ERRORES -->
+    <!-- LOGICA DEL INYECTOR MULTIMEDIA COMPARTIDO -->
     <script>
         function procesarVideo() {
             const urlOriginal = document.getElementById('url-input').value.trim();
@@ -189,30 +189,33 @@
 
             const contenedor = document.getElementById('media-container');
 
-            // PIPELINE 1: EXTRACTOR OFICIAL YOUTUBE (watch?v=)
-            if (urlOriginal.includes('watch?v=')) {
+            // PIPELINE INTEGRAL PARA ENLACES CORTOS DE COMPARTIR (youtu.be)
+            if (urlOriginal.includes('youtu.be/')) {
                 try {
-                    const urlObj = new URL(urlOriginal);
-                    const idLimpio = urlObj.searchParams.get('v');
+                    // Cortamos la URL para aislar de forma exacta los 11 caracteres respetando mayúsculas
+                    const segmentoUrl = urlOriginal.split('youtu.be/')[1];
+                    if (segmentoUrl) {
+                        // Eliminamos los parámetros extras del final (?si=...) para dejar el ID puro
+                        const idLimpio = segmentoUrl.split('?')[0];
 
-                    if (idLimpio) {
-                        contenedor.innerHTML = '<iframe src="https://youtube.com' + idLimpio + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-                        console.log('¡Éxito! Video de YouTube inyectado.');
-                        return;
+                        if (idLimpio && idLimpio.length === 11) {
+                            contenedor.innerHTML = '<iframe src="https://youtube.com' + idLimpio + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+                            console.log('¡Éxito total! Video móvil inyectado con éxito.');
+                            return;
+                        }
                     }
                 } catch (err) {
-                    console.error('Error al leer la URL de YouTube:', err);
+                    console.error('Error en el extractor móvil:', err);
                 }
             }
 
-            // PIPELINE 2 Y 3: ARCHIVOS DIRECTOS .MP4 / .M3U8 O REPRODUCCIÓN LOCAL
+            // RESPALDO PARA ARCHIVOS LOCALES O .MP4 DIRECTOS DE INTERNET
             if (urlOriginal.includes('.mp4') || urlOriginal.includes('.m3u8') || urlOriginal === 'video.mp4') {
                 contenedor.innerHTML = '<video id="anime-video" controls autoplay><source src="' + urlOriginal + '" type="video/mp4"></video>';
-                console.log('¡Éxito! Archivo de video directo o local inyectado.');
                 return;
             }
 
-            alert('Formato no reconocido. Asegúrate de copiar el enlace largo de la barra de direcciones de YouTube (que tenga watch?v=) o un archivo directo .mp4.');
+            alert('Enlace no reconocido. Por favor, pega un enlace corto válido de la opción COMPARTIR de YouTube.');
         }
     </script>
 </body>
